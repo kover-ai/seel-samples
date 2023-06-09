@@ -3,12 +3,10 @@ import {
   Layout,
   LegacyCard,
   Grid,
-  HorizontalStack,
   SkeletonBodyText,
   TextContainer,
   SkeletonDisplayText,
   SkeletonTabs,
-  SkeletonThumbnail
 } from '@shopify/polaris';
 import React, { useEffect, useState } from 'react';
 import 'normalize.css';
