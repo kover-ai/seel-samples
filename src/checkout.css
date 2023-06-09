@@ -1,0 +1,39 @@
+.submit-order {
+  height: 50px;
+  width: 100%;
+  line-height: 50px;
+  text-align: center;
+  margin-top: 16px;
+  background-color: #e2e2e2;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #5C5F62;
+  cursor: pointer;
+}
+.price-line {
+  height: 40px;
+  line-height: 40px;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.price-line-title {
+  font-size: 14px;
+  font-weight: 600;
+}
+.price-total {
+  /* color: #bb4e4e; */
+  font-weight: 700;
+}
+.item-line {
+  display: flex;
+  flex-direction: row;
+}
+.item-img {
+  display: flex;
+}
+#seel-ra-widget-root {
+  min-height: 16px;
+}
