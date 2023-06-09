@@ -2,10 +2,13 @@ import {
   SkeletonPage,
   Layout,
   LegacyCard,
+  Grid,
+  HorizontalStack,
   SkeletonBodyText,
   TextContainer,
   SkeletonDisplayText,
-  SkeletonTabs
+  SkeletonTabs,
+  SkeletonThumbnail
 } from '@shopify/polaris';
 import React, { useEffect, useState } from 'react';
 import 'normalize.css';
@@ -98,7 +101,8 @@ function Chcekout() {
      */
 
     // assume the order is successful, and the order number is `order_1234`
-    placeOrder('order_1234')
+    const resp = await placeOrder('order_1234')
+    console.log(resp)
   };
 
   return (
@@ -109,26 +113,62 @@ function Chcekout() {
             <SkeletonTabs count={3} />
           </LegacyCard>
           <LegacyCard sectioned title="Ship To">
-            <TextContainer>
-              <SkeletonDisplayText size="medium" />
-              <SkeletonBodyText lines={2} />
-              <SkeletonDisplayText size="medium" />
-              <SkeletonBodyText lines={5} />
-            </TextContainer>
+            <Grid columns={{xs: 2, sm: 2, md: 2, lg: 2, xl: 2}}>
+              <Grid.Cell>
+                <TextContainer>
+                  <SkeletonDisplayText size="large" />
+                  <SkeletonBodyText lines={2} />
+                </TextContainer>
+              </Grid.Cell>
+              <Grid.Cell>
+                <TextContainer>
+                  <SkeletonDisplayText size="large" />
+                  <SkeletonBodyText lines={1} />
+                </TextContainer>
+              </Grid.Cell>
+              <Grid.Cell>
+                <TextContainer>
+                  <SkeletonDisplayText size="large" />
+                  <SkeletonBodyText lines={2} />
+                </TextContainer>
+              </Grid.Cell>
+              <Grid.Cell>
+                <TextContainer>
+                  <SkeletonDisplayText size="large" />
+                  <SkeletonBodyText lines={3} />
+                </TextContainer>
+              </Grid.Cell>
+              <Grid.Cell>
+                <TextContainer>
+                  <SkeletonDisplayText size="large" />
+                  <SkeletonBodyText lines={3} />
+                </TextContainer>
+              </Grid.Cell>
+              <Grid.Cell>
+                <TextContainer>
+                  <SkeletonDisplayText size="large" />
+                  <SkeletonBodyText lines={2} />
+                </TextContainer>
+              </Grid.Cell>
+            </Grid>
           </LegacyCard>
           {/* 
             An anchor for the insurance component will be automatically inserted 
             when the quote API response is successful. 
           */}
           <div id="seel-ra-widget-root"></div>
-          <LegacyCard sectioned title="Payment card details">
-            <TextContainer>
-              <SkeletonDisplayText size="extraLarge" />
-              <SkeletonBodyText lines={1} />
-            </TextContainer>
-          </LegacyCard>
-          <LegacyCard sectioned>
-            <SkeletonBodyText lines={2} />
+          <LegacyCard sectioned title="Payment cart details">
+            <Grid columns={{xs: 5, sm: 5, md: 5, lg: 5, xl: 5}}>
+              <Grid.Cell>
+                <SkeletonDisplayText size="extraLarge" />
+              </Grid.Cell>
+              <Grid.Cell>
+                <SkeletonDisplayText size="extraLarge" />
+              </Grid.Cell>
+              <Grid.Cell>
+                <SkeletonDisplayText size="extraLarge" />
+              </Grid.Cell>
+            </Grid>
           </LegacyCard>
           <div className="submit-order" onClick={submitOrder}>
             {'SUBMIT ORDER'}
@@ -136,7 +176,7 @@ function Chcekout() {
         </Layout.Section>
         <Layout.Section secondary>
           <LegacyCard title="Items">
-            <LegacyCard.Section className="item-line">
+            <LegacyCard.Section>
               <TextContainer>
                 <SkeletonDisplayText size="small" />
                 <SkeletonBodyText lines={3} />
