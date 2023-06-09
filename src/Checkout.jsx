@@ -20,7 +20,7 @@ import './checkout.css';
 
 function Chcekout() {
   const [seelRA, setSeelRA] = useState({});
-  const [total, setTotal] = useState(67.4);
+  const [total, setTotal] = useState(67.4); // mocked total price
 
   /**
    * Access the APIs through the global object window, 
@@ -97,6 +97,7 @@ function Chcekout() {
      * use the order number as a parameter to call the placeorder API.
      */
 
+    // assume the order is successful, and the order number is `order_1234`
     placeOrder('order_1234')
   };
 
