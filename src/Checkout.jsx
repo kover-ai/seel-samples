@@ -155,7 +155,7 @@ function Chcekout() {
             when the quote API response is successful. 
           */}
           <div id="seel-ra-widget-root"></div>
-          <LegacyCard sectioned title="Payment cart details">
+          <LegacyCard sectioned title="Payment card details">
             <Grid columns={{xs: 5, sm: 5, md: 5, lg: 5, xl: 5}}>
               <Grid.Cell>
                 <SkeletonDisplayText size="extraLarge" />
