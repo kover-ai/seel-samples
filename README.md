@@ -14,12 +14,12 @@ Access the APIs through the global object window, taking care to use the `SeelSD
 
 ```jsx
 const { Events, seelSDK } = window.SeelSDK || {};
-const { createQuote, placeOrder } = seelSDK || {};
+const { createQuote, createOrder } = seelSDK || {};
 ```
 
 ### 2. Provide the host element.
 
-Add an element to the page template and set the ID to `seel-ra-widget-root` as an anchor for the insurance component.
+Add an element to the page template and set the ID to `seel-ra-widget-root` as an anchor for the assurance component.
 
 ```html
 <div id="seel-ra-widget-root"></div>
@@ -27,77 +27,82 @@ Add an element to the page template and set the ID to `seel-ra-widget-root` as a
 
 ### 3. Set up listeners for widget events.
 
-Display the price of insurance products in the billing details based on the user's selection, and update the total price accordingly.
+Display the price of assurance products in the billing details based on the user's selection, and update the total price accordingly.
 
 ```jsx
 const { Events } = window.SeelSDK || {};
 
 document.addEventListener(Events.checked, (event) => {
   /*
-	When the user checks the assurance box, you can obtain 
-  the checked status and quote data from the event.detail.
-  shape of event.detail
-	{ 
-	  price, 
-	  checked, 
-	  quoteId, 
-	  total, 
-	  extraInfo 
-	} 
-  At this point, you can insert an assurance line into your 
-  order and update the total.
+	When the user selects the assurance box, retrieve the checked status and quote data from the event.detail object.
+	The structure of event.detail is as follows:
+	{
+		price,
+		checked,
+		quoteId,
+		total,
+		extraInfo
+	}
+	At this stage, you can add an assurance line to the order and update the total accordingly.
   */
 });
 document.addEventListener(Events.unchecked, (event) => {
   /*
-	When the user sets the assurance as checked, you can retrieve
-  the checked status and quote data from event.detail.
-  shape of event.detail
-	{ 
-	  price, 
-	  checked, 
-	  quoteId, 
-	  total, 
-	  extraInfo 
-	} 
-	At this point, you can remove the assurance line and update the total.
+	When the user marks the assurance as unchecked, retrieve the checked status and quote data from event.detail.
+	The structure of event.detail is as follows:
+	{
+		price,
+		checked,
+		quoteId,
+		total,
+		extraInfo
+	}
+	At this stage, you can remove the assurance line and update the total accordingly.
   */
 });
 ```
 
 ### 4. Create a quote from cart data.
 
-If the current shopping cart item is insurable and has a successful quote result, the insurance component will be automatically inserted into the container provided in step 2.
+If the current item in the shopping cart is insurable and has a successful quote result, the assurance component will be automatically inserted into the container provided in step 2.
 
 ```jsx
-// Mock input parameters always returns a successful quote.
-const items = [
-  {
-    product_url: 'url',
-    quantity: 1,
-    price: 34.33,
-    title: 'mock_success',
-  },
-];
+// The mock input parameters always return a successful quote.
+const quote_param = {
+	"line_items": [
+	{
+		"line_item_id": "123",
+		"price": 62.40
+	}
+	]
+};
 
 // Deconstruct the createQuote API from the SeelSDK object.
 const { Events, seelSDK } = window.SeelSDK || {};
 const { createQuote } = seelSDK || {};
-createQuote({ items });
+createQuote({ quote_param });
 ```
 
-### 5. Place your order.
+### 5. Create your order.
 
-After successfully submitting the current order, use its order number as input and call the placeOrder API.
+After successfully submitting the current order, use its order number as input and call the createOrder API.
 
 ```jsx
-// Mock input parameters always returns a successful order.
-const orderNo = order_1234
+// The mock input parameters always returns a successful order.
+const order_param = {
+	"line_items": [
+	{
+		"line_item_id": "123",
+		"price": 62.40
+	}
+	],
+	"order_id": "12345"
+};
 
-// Deconstruct the placeOrder API from the SeelSDK object.
+// Deconstruct the createOrder API from the SeelSDK object.
 const { Events, seelSDK } = window.SeelSDK || {};
-const { placeOrder } = seelSDK || {};
-placeOrder(orderNo)
+const { createOrder } = seelSDK || {};
+createOrder(order_param)
 ```
 
 ## Demo

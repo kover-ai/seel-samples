@@ -28,7 +28,7 @@ function Chcekout() {
    * making sure to utilize the SeelSDK namespace.
    */
   const { Events, seelSDK } = window.SeelSDK || {};
-  const { createQuote, placeOrder } = seelSDK || {};
+  const { createQuote, createOrder } = seelSDK || {};
 
   useEffect(() => {
     /**
@@ -79,13 +79,13 @@ function Chcekout() {
      * The quote parameters are as follows. Note that this quote_param is for demo purposes only,
      * and the createQuote function returns a mock response. For more details, please refer to our
      * developer documentation at: https://developer.seel.com/reference/createquote. We recommend
-     * using server-side implementation for security purposes.
+     * using server-side implementation of createQuote for security purposes.
      */
     const quote_param = {
       "line_items": [
         {
           "line_item_id": "123",
-          "price": 19.99
+          "price": 62.40
         }
       ]
     };
@@ -94,12 +94,24 @@ function Chcekout() {
 
   const submitOrder = async (ev) => {
     /**
-     * When the user clicks on "Submit Order", if the order is successful,
-     * use the order number as a parameter to call the placeorder API.
+     * When the user clicks on "Submit Order" and the order is successfully created, call the createOrder 
+     * function.
+     * 
+     * The order parameters are as follows. Note that this order_param is for demo purposes only,
+     * and the createOrder function returns a mock response. For more details, please refer to our
+     * developer documentation at: https://developer.seel.com/reference/createorder. We recommend
+     * using server-side implementation of createOrder for security purposes.
      */
-
-    // Assuming the order is successful, and the order number is "order_1234".
-    const resp = await placeOrder('order_1234');
+    const order_param = {
+      "line_items": [
+        {
+          "line_item_id": "123",
+          "price": 62.40
+        }
+      ],
+      "order_id": "12345"
+    };
+    const resp = await createOrder({ order_param });
     console.log(resp);
   };
 
