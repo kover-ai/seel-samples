@@ -14,17 +14,17 @@ import './checkout.css';
 
 /**
  * include SDK
- * Seel SDK has already been loaded into the public/checkout.html template file 
+ * Seel SDK has already been loaded into the public/checkout.html template file
  * via the script tag. The SDK can also be imported using other methods,
  * but it is important to pay attention to the timing of loading and calling.
  */
 
 function Chcekout() {
   const [seelRA, setSeelRA] = useState({});
-  const [total, setTotal] = useState(67.4); // mocked total price
+  const [inssuranceFee, setInssuranceFee] = useState(0);
 
   /**
-   * Access the APIs through the global object window, 
+   * Access the APIs through the global object window,
    * taking care to use the SeelSDK namespace.
    */
   const { Events, seelSDK } = window.SeelSDK || {};
@@ -32,7 +32,7 @@ function Chcekout() {
 
   useEffect(() => {
     /**
-     * Display the price of insurance products in the billing details based on the user's selection, 
+     * Display the price of insurance products in the billing details based on the user's selection,
      * and update the total price accordingly.
      */
     document.addEventListener(Events.checked, (event) => {
@@ -50,9 +50,9 @@ function Chcekout() {
           At this point, you can insert an assurance line into your 
           order and update the total.
        */
-      const { price } = event?.detail || {};
-      setSeelRA({ checked: true, price });
-      setTotal((total + price).toFixed(2));
+      const { price, checked } = event?.detail || {};
+      setSeelRA({ checked, price });
+      setInssuranceFee(checked ? price : 0)
     });
     document.addEventListener(Events.unchecked, (event) => {
       /**
@@ -68,9 +68,9 @@ function Chcekout() {
           } 
           At this point, you can remove the assurance line and update the total.
        */
-      const { price } = event?.detail || {};
-      setSeelRA({ checked: false });
-      setTotal(total - price);
+      const { price, checked } = event?.detail || {};
+      setSeelRA({ checked, price });
+      setInssuranceFee(checked ? price : 0)
     });
   }, []);
 
@@ -94,24 +94,24 @@ function Chcekout() {
 
   const submitOrder = async (ev) => {
     /**
-     * When the user clicks on "Submit Order", if the order is successful, 
+     * When the user clicks on "Submit Order", if the order is successful,
      * use the order number as a parameter to call the placeorder API.
      */
 
     // assume the order is successful, and the order number is `order_1234`
-    const resp = await placeOrder('order_1234')
-    console.log(resp)
+    const resp = await placeOrder('order_1234');
+    console.log(resp);
   };
 
   return (
-    <SkeletonPage title="Chcekout" primaryAction>
+    <SkeletonPage title="Checkout" primaryAction>
       <Layout>
         <Layout.Section>
           <LegacyCard>
             <SkeletonTabs count={3} />
           </LegacyCard>
           <LegacyCard sectioned title="Ship To">
-            <Grid columns={{xs: 2, sm: 2, md: 2, lg: 2, xl: 2}}>
+            <Grid columns={{ xs: 2, sm: 2, md: 2, lg: 2, xl: 2 }}>
               <Grid.Cell>
                 <TextContainer>
                   <SkeletonDisplayText size="large" />
@@ -156,7 +156,7 @@ function Chcekout() {
           */}
           <div id="seel-ra-widget-root"></div>
           <LegacyCard sectioned title="Payment card details">
-            <Grid columns={{xs: 5, sm: 5, md: 5, lg: 5, xl: 5}}>
+            <Grid columns={{ xs: 5, sm: 5, md: 5, lg: 5, xl: 5 }}>
               <Grid.Cell>
                 <SkeletonDisplayText size="extraLarge" />
               </Grid.Cell>
@@ -211,7 +211,7 @@ function Chcekout() {
             ) : null}
             <div className="total price-line">
               <div className="price-line-title">Total:</div>
-              <div className="price-total">{`$${total}`}</div>
+              <div className="price-total">{`$${(62.40 + 5 + inssuranceFee).toFixed(2)}`}</div>
             </div>
           </LegacyCard>
         </Layout.Section>
