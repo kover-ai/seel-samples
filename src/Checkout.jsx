@@ -28,7 +28,7 @@ function Chcekout() {
    * taking care to use the SeelSDK namespace.
    */
   const { Events, seelSDK } = window.SeelSDK || {};
-  const { createQuote, placeOrder } = seelSDK || {};
+  const { createQuote, createOrder } = seelSDK || {};
 
   useEffect(() => {
     /**
@@ -95,11 +95,11 @@ function Chcekout() {
   const submitOrder = async (ev) => {
     /**
      * When the user clicks on "Submit Order", if the order is successful,
-     * use the order number as a parameter to call the placeorder API.
+     * use the order number as a parameter to call the createOrder API.
      */
 
     // assume the order is successful, and the order number is `order_1234`
-    const resp = await placeOrder('order_1234');
+    const resp = await createOrder('order_1234');
     console.log(resp);
   };
 
