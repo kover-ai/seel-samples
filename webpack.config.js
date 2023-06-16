@@ -22,8 +22,8 @@ const config = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: "./public/checkout.html",
-      filename: 'checkout.html', // output file
+      template: "./public/index.html",
+      filename: 'index.html', // output file
       chunks: ["checkout"],
     }),
     // Add your plugins here

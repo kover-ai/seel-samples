@@ -2,132 +2,183 @@ import {
   SkeletonPage,
   Layout,
   LegacyCard,
+  Grid,
   SkeletonBodyText,
   TextContainer,
   SkeletonDisplayText,
-  SkeletonTabs
+  SkeletonTabs,
 } from '@shopify/polaris';
 import React, { useEffect, useState } from 'react';
 import 'normalize.css';
 import './checkout.css';
 
 /**
- * include SDK
- * Seel SDK has already been loaded into the public/checkout.html template file 
- * via the script tag. The SDK can also be imported using other methods,
- * but it is important to pay attention to the timing of loading and calling.
+ * Import the SDK
+ * The SDK for Seel has already been loaded into the public/checkout.html template file
+ * using a script tag. The SDK can also be imported using alternative methods,
+ * but it's crucial to ensure proper timing of loading and calling.
  */
 
 function Chcekout() {
   const [seelRA, setSeelRA] = useState({});
-  const [total, setTotal] = useState(67.4);
+  const [inssuranceFee, setInssuranceFee] = useState(0);
 
   /**
-   * Access the APIs through the global object window, 
-   * taking care to use the SeelSDK namespace.
+   * Access the APIs using the global object window,
+   * making sure to utilize the SeelSDK namespace.
    */
   const { Events, seelSDK } = window.SeelSDK || {};
-  const { createQuote, placeOrder } = seelSDK || {};
+  const { createQuote, createOrder } = seelSDK || {};
 
   useEffect(() => {
     /**
-     * Display the price of insurance products in the billing details based on the user's selection, 
-     * and update the total price accordingly.
+     * Update the billing details to display the price of Return Assurance(RA) products based on the user's selection,
+     * and adjust the total price accordingly.
      */
     document.addEventListener(Events.checked, (event) => {
       /**
-       *  When the user checks the assurance box, you can obtain 
-          the checked status and quote data from the event.detail.
-          shape of event.detail
-          { 
-            price, 
-            checked, 
-            quoteId, 
-            total, 
-            extraInfo 
-          } 
-          At this point, you can insert an assurance line into your 
-          order and update the total.
+       * When the user selects the RA box, retrieve the checked status and quote data from the event.detail object.
+       * The structure of event.detail is as follows:
+       * {
+       *   price,
+       *   checked,
+       *   quoteId,
+       *   total,
+       *   extraInfo
+       * }
+       * At this stage, you can add an RA line to the order and update the total accordingly.
        */
-      const { price } = event?.detail || {};
-      setSeelRA({ checked: true, price });
-      setTotal((total + price).toFixed(2));
+      const { price, checked } = event?.detail || {};
+      setSeelRA({ checked, price });
+      setInssuranceFee(checked ? price : 0)
     });
     document.addEventListener(Events.unchecked, (event) => {
       /**
-       *  When the user sets the assurance as checked, you can retrieve
-          the checked status and quote data from event.detail.
-          shape of event.detail
-          { 
-            price, 
-            checked, 
-            quoteId, 
-            total, 
-            extraInfo 
-          } 
-          At this point, you can remove the assurance line and update the total.
+       * When the user marks the RA as unchecked, retrieve the checked status and quote data from event.detail.
+       * The structure of event.detail is as follows:
+       * {
+       *   price,
+       *   checked,
+       *   quoteId,
+       *   total,
+       *   extraInfo
+       * }
+       * At this stage, you can remove the RA line and update the total accordingly.
        */
-      const { price } = event?.detail || {};
-      setSeelRA({ checked: false });
-      setTotal(total - price);
+      const { price, checked } = event?.detail || {};
+      setSeelRA({ checked, price });
+      setInssuranceFee(checked ? price : 0)
     });
   }, []);
 
   useEffect(() => {
     /**
-     * create quote when quote params are ready,
-     * the insurance component will be automatically inserted into the anchor element (seel-ra-widget-root)
+     * Create a quote when the quote parameters are ready.
+     * The RA component will be automatically inserted into the anchor element (seel-ra-widget-root).
+     * 
+     * The quote parameters are as follows. Note that this quote_param is for demo purposes only,
+     * and the createQuote function returns a mock response. For more details, please refer to our
+     * developer documentation at: https://developer.seel.com/reference/createquote. We recommend
+     * using server-side implementation of createQuote for security purposes.
      */
-
-    // quote params, `mock_success` is reserved title for success quote creation
-    const items = [
-      {
-        product_url: 'url',
-        quantity: 1,
-        price: 34.33,
-        title: 'mock_success',
-      },
-    ];
-    createQuote({ items });
+    const quote_param = {
+      "line_items": [
+        {
+          "line_item_id": "123",
+          "price": 62.40
+        }
+      ]
+    };
+    createQuote({ quote_param });
   }, []);
 
   const submitOrder = async (ev) => {
     /**
-     * When the user clicks on "Submit Order", if the order is successful, 
-     * use the order number as a parameter to call the placeorder API.
+     * When the user clicks on "Submit Order" and the order is successfully created, call the createOrder 
+     * function.
+     * 
+     * The order parameters are as follows. Note that this order_param is for demo purposes only,
+     * and the createOrder function returns a mock response. For more details, please refer to our
+     * developer documentation at: https://developer.seel.com/reference/createorder. We recommend
+     * using server-side implementation of createOrder for security purposes.
      */
-
-    placeOrder('order_1234')
+    const order_param = {
+      "line_items": [
+        {
+          "line_item_id": "123",
+          "price": 62.40
+        }
+      ],
+      "order_id": "12345"
+    };
+    const resp = await createOrder({ order_param });
+    console.log(resp);
   };
 
   return (
-    <SkeletonPage title="Chcekout" primaryAction>
+    <SkeletonPage title="Checkout" primaryAction>
       <Layout>
         <Layout.Section>
           <LegacyCard>
             <SkeletonTabs count={3} />
           </LegacyCard>
           <LegacyCard sectioned title="Ship To">
-            <TextContainer>
-              <SkeletonDisplayText size="medium" />
-              <SkeletonBodyText lines={2} />
-              <SkeletonDisplayText size="medium" />
-              <SkeletonBodyText lines={5} />
-            </TextContainer>
+            <Grid columns={{ xs: 2, sm: 2, md: 2, lg: 2, xl: 2 }}>
+              <Grid.Cell>
+                <TextContainer>
+                  <SkeletonDisplayText size="large" />
+                  <SkeletonBodyText lines={2} />
+                </TextContainer>
+              </Grid.Cell>
+              <Grid.Cell>
+                <TextContainer>
+                  <SkeletonDisplayText size="large" />
+                  <SkeletonBodyText lines={1} />
+                </TextContainer>
+              </Grid.Cell>
+              <Grid.Cell>
+                <TextContainer>
+                  <SkeletonDisplayText size="large" />
+                  <SkeletonBodyText lines={2} />
+                </TextContainer>
+              </Grid.Cell>
+              <Grid.Cell>
+                <TextContainer>
+                  <SkeletonDisplayText size="large" />
+                  <SkeletonBodyText lines={3} />
+                </TextContainer>
+              </Grid.Cell>
+              <Grid.Cell>
+                <TextContainer>
+                  <SkeletonDisplayText size="large" />
+                  <SkeletonBodyText lines={3} />
+                </TextContainer>
+              </Grid.Cell>
+              <Grid.Cell>
+                <TextContainer>
+                  <SkeletonDisplayText size="large" />
+                  <SkeletonBodyText lines={2} />
+                </TextContainer>
+              </Grid.Cell>
+            </Grid>
           </LegacyCard>
           {/* 
-            An anchor for the insurance component will be automatically inserted 
+            An anchor for the RA component will be automatically inserted 
             when the quote API response is successful. 
           */}
           <div id="seel-ra-widget-root"></div>
           <LegacyCard sectioned title="Payment card details">
-            <TextContainer>
-              <SkeletonDisplayText size="extraLarge" />
-              <SkeletonBodyText lines={1} />
-            </TextContainer>
-          </LegacyCard>
-          <LegacyCard sectioned>
-            <SkeletonBodyText lines={2} />
+            <Grid columns={{ xs: 5, sm: 5, md: 5, lg: 5, xl: 5 }}>
+              <Grid.Cell>
+                <SkeletonDisplayText size="extraLarge" />
+              </Grid.Cell>
+              <Grid.Cell>
+                <SkeletonDisplayText size="extraLarge" />
+              </Grid.Cell>
+              <Grid.Cell>
+                <SkeletonDisplayText size="extraLarge" />
+              </Grid.Cell>
+            </Grid>
           </LegacyCard>
           <div className="submit-order" onClick={submitOrder}>
             {'SUBMIT ORDER'}
@@ -135,7 +186,7 @@ function Chcekout() {
         </Layout.Section>
         <Layout.Section secondary>
           <LegacyCard title="Items">
-            <LegacyCard.Section className="item-line">
+            <LegacyCard.Section>
               <TextContainer>
                 <SkeletonDisplayText size="small" />
                 <SkeletonBodyText lines={3} />
@@ -155,14 +206,14 @@ function Chcekout() {
             </LegacyCard.Section>
             <div className="items price-line">
               <div className="price-line-title">Items:</div>
-              <div>$62.40</div>
+              <div>$217.60</div>
             </div>
             <div className="shipping price-line">
               <div className="price-line-title">Shipping:</div>
               <div>$5.00</div>
             </div>
             {/* 
-              Update assurance price and total price when the user checks the assurance component.
+              Update RA price and total price when the user checks the RA component.
             */}
             {seelRA.checked && seelRA.price ? (
               <div className="seel-ra price-line">
@@ -172,7 +223,7 @@ function Chcekout() {
             ) : null}
             <div className="total price-line">
               <div className="price-line-title">Total:</div>
-              <div className="price-total">{`$${total}`}</div>
+              <div className="price-total">{`$${(217.60 + 5 + inssuranceFee).toFixed(2)}`}</div>
             </div>
           </LegacyCard>
         </Layout.Section>
