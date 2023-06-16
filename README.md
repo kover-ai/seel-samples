@@ -7,7 +7,7 @@ This sample shows you how to integrate with Seel Return Assurance service on che
 ### 1. **Include SDK**
 
 ```jsx
-<script src="https://cdn.seel.com/scripts/sample/marketplace-embedded.min.js"></script>
+<script src="https://cdn.seel.com/sdk/sandbox/marketplace-embedded.min.js"></script>
 ```
 
 Access the APIs through the global object window, taking care to use the `SeelSDK` namespace.
