@@ -13,10 +13,10 @@ import 'normalize.css';
 import './checkout.css';
 
 /**
- * include SDK
- * Seel SDK has already been loaded into the public/checkout.html template file
- * via the script tag. The SDK can also be imported using other methods,
- * but it is important to pay attention to the timing of loading and calling.
+ * Import the SDK
+ * The SDK for Seel has already been loaded into the public/checkout.html template file
+ * using a script tag. The SDK can also be imported using alternative methods,
+ * but it's crucial to ensure proper timing of loading and calling.
  */
 
 function Chcekout() {
@@ -24,31 +24,29 @@ function Chcekout() {
   const [inssuranceFee, setInssuranceFee] = useState(0);
 
   /**
-   * Access the APIs through the global object window,
-   * taking care to use the SeelSDK namespace.
+   * Access the APIs using the global object window,
+   * making sure to utilize the SeelSDK namespace.
    */
   const { Events, seelSDK } = window.SeelSDK || {};
   const { createQuote, createOrder } = seelSDK || {};
 
   useEffect(() => {
     /**
-     * Display the price of insurance products in the billing details based on the user's selection,
-     * and update the total price accordingly.
+     * Update the billing details to display the price of assurance products based on the user's selection,
+     * and adjust the total price accordingly.
      */
     document.addEventListener(Events.checked, (event) => {
       /**
-       *  When the user checks the assurance box, you can obtain 
-          the checked status and quote data from the event.detail.
-          shape of event.detail
-          { 
-            price, 
-            checked, 
-            quoteId, 
-            total, 
-            extraInfo 
-          } 
-          At this point, you can insert an assurance line into your 
-          order and update the total.
+       * When the user selects the assurance box, retrieve the checked status and quote data from the event.detail object.
+       * The structure of event.detail is as follows:
+       * {
+       *   price,
+       *   checked,
+       *   quoteId,
+       *   total,
+       *   extraInfo
+       * }
+       * At this stage, you can add an assurance line to the order and update the total accordingly.
        */
       const { price, checked } = event?.detail || {};
       setSeelRA({ checked, price });
@@ -56,17 +54,16 @@ function Chcekout() {
     });
     document.addEventListener(Events.unchecked, (event) => {
       /**
-       *  When the user sets the assurance as checked, you can retrieve
-          the checked status and quote data from event.detail.
-          shape of event.detail
-          { 
-            price, 
-            checked, 
-            quoteId, 
-            total, 
-            extraInfo 
-          } 
-          At this point, you can remove the assurance line and update the total.
+       * When the user marks the assurance as unchecked, retrieve the checked status and quote data from event.detail.
+       * The structure of event.detail is as follows:
+       * {
+       *   price,
+       *   checked,
+       *   quoteId,
+       *   total,
+       *   extraInfo
+       * }
+       * At this stage, you can remove the assurance line and update the total accordingly.
        */
       const { price, checked } = event?.detail || {};
       setSeelRA({ checked, price });
@@ -76,30 +73,45 @@ function Chcekout() {
 
   useEffect(() => {
     /**
-     * create quote when quote params are ready,
-     * the insurance component will be automatically inserted into the anchor element (seel-ra-widget-root)
+     * Create a quote when the quote parameters are ready.
+     * The assurance component will be automatically inserted into the anchor element (seel-ra-widget-root).
+     * 
+     * The quote parameters are as follows. Note that this quote_param is for demo purposes only,
+     * and the createQuote function returns a mock response. For more details, please refer to our
+     * developer documentation at: https://developer.seel.com/reference/createquote. We recommend
+     * using server-side implementation of createQuote for security purposes.
      */
-
-    // quote params, `mock_success` is reserved title for success quote creation
-    const items = [
-      {
-        product_url: 'url',
-        quantity: 1,
-        price: 34.33,
-        title: 'mock_success',
-      },
-    ];
-    createQuote({ items });
+    const quote_param = {
+      "line_items": [
+        {
+          "line_item_id": "123",
+          "price": 62.40
+        }
+      ]
+    };
+    createQuote({ quote_param });
   }, []);
 
   const submitOrder = async (ev) => {
     /**
-     * When the user clicks on "Submit Order", if the order is successful,
-     * use the order number as a parameter to call the createOrder API.
+     * When the user clicks on "Submit Order" and the order is successfully created, call the createOrder 
+     * function.
+     * 
+     * The order parameters are as follows. Note that this order_param is for demo purposes only,
+     * and the createOrder function returns a mock response. For more details, please refer to our
+     * developer documentation at: https://developer.seel.com/reference/createorder. We recommend
+     * using server-side implementation of createOrder for security purposes.
      */
-
-    // assume the order is successful, and the order number is `order_1234`
-    const resp = await createOrder('order_1234');
+    const order_param = {
+      "line_items": [
+        {
+          "line_item_id": "123",
+          "price": 62.40
+        }
+      ],
+      "order_id": "12345"
+    };
+    const resp = await createOrder({ order_param });
     console.log(resp);
   };
 
@@ -151,7 +163,7 @@ function Chcekout() {
             </Grid>
           </LegacyCard>
           {/* 
-            An anchor for the insurance component will be automatically inserted 
+            An anchor for the assurance component will be automatically inserted 
             when the quote API response is successful. 
           */}
           <div id="seel-ra-widget-root"></div>
@@ -194,7 +206,7 @@ function Chcekout() {
             </LegacyCard.Section>
             <div className="items price-line">
               <div className="price-line-title">Items:</div>
-              <div>$62.40</div>
+              <div>$217.60</div>
             </div>
             <div className="shipping price-line">
               <div className="price-line-title">Shipping:</div>
@@ -211,7 +223,7 @@ function Chcekout() {
             ) : null}
             <div className="total price-line">
               <div className="price-line-title">Total:</div>
-              <div className="price-total">{`$${(62.40 + 5 + inssuranceFee).toFixed(2)}`}</div>
+              <div className="price-total">{`$${(217.60 + 5 + inssuranceFee).toFixed(2)}`}</div>
             </div>
           </LegacyCard>
         </Layout.Section>
