@@ -107,7 +107,7 @@ createOrder(order_param)
 
 ## Demo
 
-[live demo](https://page.seel.com/marketplace/return-assurance-sample/checkout.html)
+[live demo](https://page.seel.com/marketplace/return-assurance-sample/index.html)
 
 ## Run Sample Locally
 
