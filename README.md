@@ -128,7 +128,3 @@ If you want to preview the modified effect in real time, please use the followin
 ```bash
 npm run watch
 ```
-
-## FAQ
-
-## Get Supported
