@@ -20,7 +20,7 @@ import './checkout.css';
  */
 
 function Chcekout() {
-  const [seelRA, setSeelRA] = useState({});
+  const [seelSP, setSeelSP] = useState({});
   const [inssuranceFee, setInssuranceFee] = useState(0);
 
   /**
@@ -49,7 +49,7 @@ function Chcekout() {
        * At this stage, you can add an assurance line to the order and update the total accordingly.
        */
       const { price, checked } = event?.detail || {};
-      setSeelRA({ checked, price });
+      setSeelSP({ checked, price });
       setInssuranceFee(checked ? price : 0)
     });
     document.addEventListener(Events.unchecked, (event) => {
@@ -66,7 +66,7 @@ function Chcekout() {
        * At this stage, you can remove the assurance line and update the total accordingly.
        */
       const { price, checked } = event?.detail || {};
-      setSeelRA({ checked, price });
+      setSeelSP({ checked, price });
       setInssuranceFee(checked ? price : 0)
     });
   }, []);
@@ -166,7 +166,7 @@ function Chcekout() {
             An anchor for the assurance component will be automatically inserted 
             when the quote API response is successful. 
           */}
-          <div id="seel-ra-widget-root"></div>
+          <div id="seel-sp-widget-root"></div>
           <LegacyCard sectioned title="Payment card details">
             <Grid columns={{ xs: 5, sm: 5, md: 5, lg: 5, xl: 5 }}>
               <Grid.Cell>
@@ -215,10 +215,10 @@ function Chcekout() {
             {/* 
               Update assurance price and total price when the user checks the assurance component.
             */}
-            {seelRA.checked && seelRA.price ? (
+            {seelSP.checked && seelSP.price ? (
               <div className="seel-ra price-line">
-                <div className="price-line-title">Return Assurance:</div>
-                <div>{`$${seelRA.price}`}</div>
+                <div className="price-line-title">Shipping Protection:</div>
+                <div>{`$${seelSP.price}`}</div>
               </div>
             ) : null}
             <div className="total price-line">

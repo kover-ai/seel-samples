@@ -1,13 +1,13 @@
 # Code Sample
 
-This sample shows you how to integrate with Seel Return Assurance service on checkout page.
+This sample shows you how to integrate with Seel Shipping Protection service on checkout page.
 
 ## Integration Guide
 
 ### 1. **Include SDK**
 
 ```jsx
-<script src="https://cdn.seel.com/sdk/sandbox/marketplace-embedded.min.js"></script>
+<script src="https://cdn.seel.com/sdk/sandbox/marketplace-sp-embedded.min.js"></script>
 ```
 
 Access the APIs through the global object window, taking care to use the `SeelSDK` namespace.
@@ -19,10 +19,10 @@ const { createQuote, createOrder } = seelSDK || {};
 
 ### 2. Provide the host element.
 
-Add an element to the page template and set the ID to `seel-ra-widget-root` as an anchor for the assurance component.
+Add an element to the page template and set the ID to `seel-sp-widget-root` as an anchor for the assurance component.
 
 ```html
-<div id="seel-ra-widget-root"></div>
+<div id="seel-sp-widget-root"></div>
 ```
 
 ### 3. Set up listeners for widget events.
@@ -107,7 +107,7 @@ createOrder(order_param)
 
 ## Demo
 
-[live demo](https://page.seel.com/marketplace/return-assurance-sample/index.html)
+[live demo](https://page.seel.com/marketplace/shipping-assurance-sample/index.html)
 
 ## Run Sample Locally
 
